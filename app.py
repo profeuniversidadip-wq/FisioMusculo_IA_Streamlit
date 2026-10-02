@@ -1,80 +1,197 @@
-
 import streamlit as st
 import random
 
 st.set_page_config(
     page_title="FisioMúsculo IA",
-    page_icon="💪",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# =========================
-# ESTILO
-# =========================
+# ============================================================
+# DISEÑO — plantilla final reutilizada de FisioEndocrino IA
+# ============================================================
 st.markdown("""
 <style>
-    .stApp {
-        background: linear-gradient(180deg, #eaf4ff 0%, #f7fbff 55%, #ffffff 100%);
-    }
+html, body, [class*="css"] {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(180deg, #eaf5ff 0%, #f7fbff 48%, #ffffff 100%);
+}
+
+.block-container {
+    max-width: 760px;
+    padding-top: 1.25rem;
+    padding-bottom: 1.4rem;
+}
+
+[data-testid="stHeader"] {
+    background: rgba(255,255,255,0);
+}
+
+#MainMenu, footer {
+    visibility: hidden;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.08;
+    color: #18354f;
+    margin: 0;
+}
+
+.hero-subtitle {
+    color: #5d7387;
+    font-size: .94rem;
+    margin-top: .25rem;
+    margin-bottom: .7rem;
+}
+
+.info-row {
+    display: flex;
+    gap: .6rem;
+    margin: .3rem 0 .9rem 0;
+}
+
+.info-chip {
+    flex: 1;
+    background: rgba(255,255,255,.90);
+    border: 1px solid #d7e6f2;
+    border-radius: 13px;
+    padding: .55rem .65rem;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(42,78,110,.05);
+}
+
+.info-label {
+    color: #708699;
+    font-size: .70rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.info-value {
+    color: #193a55;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-top: .05rem;
+}
+
+.question-card {
+    background: rgba(255,255,255,.95);
+    border: 1px solid #d9e7f2;
+    border-radius: 17px;
+    padding: 1rem 1.05rem;
+    box-shadow: 0 6px 18px rgba(36,78,114,.07);
+    margin-bottom: .55rem;
+}
+
+.question-number {
+    color: #6f879b;
+    font-size: .78rem;
+    font-weight: 700;
+    margin-bottom: .35rem;
+}
+
+.question-text {
+    color: #163850;
+    font-size: 1.08rem;
+    line-height: 1.42;
+    font-weight: 750;
+}
+
+.action-card {
+    background: rgba(255,255,255,.80);
+    border: 1px solid #d9e7f2;
+    border-radius: 15px;
+    padding: .75rem;
+}
+
+.feedback-box {
+    background: #ffffff;
+    border: 1px solid #d9e7f2;
+    border-radius: 15px;
+    padding: .8rem .9rem;
+    margin-top: .7rem;
+    line-height: 1.42;
+}
+
+.feedback-title {
+    color: #183b56;
+    font-weight: 800;
+    margin-bottom: .3rem;
+}
+
+.small-note {
+    color: #708699;
+    font-size: .80rem;
+}
+
+.author {
+    color: #718596;
+    text-align: center;
+    font-size: .76rem;
+    margin-top: 1.2rem;
+}
+
+div.stButton > button {
+    border-radius: 11px;
+    min-height: 44px;
+    font-weight: 700;
+}
+
+div.stButton > button[kind="primary"] {
+    width: 100%;
+}
+
+[data-testid="stRadio"] label p {
+    font-size: .94rem;
+}
+
+@media (max-width: 640px) {
     .block-container {
-        max-width: 820px;
-        padding-top: 2.2rem;
-        padding-bottom: 2rem;
+        padding-top: .8rem;
+        padding-left: .8rem;
+        padding-right: .8rem;
+        padding-bottom: 1rem;
     }
-    h1 {
-        font-size: 2.1rem !important;
-        margin-bottom: 0.2rem !important;
+
+    .hero-title {
+        font-size: 1.58rem;
     }
-    h2, h3 {
-        color: #17324d;
+
+    .hero-subtitle {
+        font-size: .84rem;
     }
-    .subtle {
-        color: #486581;
-        font-size: 0.95rem;
-    }
+
     .question-card {
-        background: rgba(255,255,255,0.92);
-        border: 1px solid #d7e6f5;
-        border-radius: 18px;
-        padding: 1.2rem 1.2rem 1rem 1.2rem;
-        box-shadow: 0 5px 18px rgba(40,85,125,.08);
-        margin-bottom: 1rem;
+        padding: .85rem .85rem;
     }
-    .level-badge {
-        display: inline-block;
-        padding: 0.2rem 0.65rem;
-        border-radius: 999px;
-        background: #dceeff;
-        color: #174a73;
-        font-weight: 700;
-        font-size: .88rem;
-        margin-bottom: .7rem;
+
+    .question-text {
+        font-size: 1rem;
     }
-    .score-box {
-        background: #ffffff;
-        border: 1px solid #d7e6f5;
-        border-radius: 14px;
-        padding: .9rem 1rem;
-        margin-bottom: .8rem;
+
+    .info-value {
+        font-size: 1rem;
     }
-    div.stButton > button[kind="primary"] {
-        width: 100%;
-        font-weight: 700;
-        border-radius: 12px;
-        min-height: 46px;
+
+    .info-label {
+        font-size: .64rem;
     }
-    div.stButton > button:not([kind="primary"]) {
-        border-radius: 12px;
+
+    div.stButton > button {
+        min-height: 44px;
     }
+}
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# BANCO DE PREGUNTAS
-# Cada pregunta contiene:
-# nivel, pregunta, opciones, correcta, feedback_correcto, feedback_error
-# =========================
+# ============================================================
+# BANCO: 80 preguntas — 20 por nivel
+# ============================================================
 QUESTIONS = [
 # NIVEL 1
 {"level":1,"q":"¿Cuál es la función fisiológica principal del tejido muscular?","options":["Producir hormonas","Generar fuerza mecánica","Almacenar calcio extracelular","Transportar oxígeno"],"answer":"Generar fuerza mecánica","ok":"Correcto. El tejido muscular está especializado en generar fuerza mecánica mediante proteínas contráctiles dependientes de ATP y Ca²⁺.","bad":"Revisa la función general del tejido muscular: su rasgo central es la generación de fuerza mecánica."},
@@ -165,222 +282,362 @@ QUESTIONS = [
 {"level":4,"q":"Un estudiante concluye: “En músculo esquelético y cardíaco el Ca²⁺ actúa sobre troponina, mientras que en músculo liso actúa sobre calmodulina”. Según los materiales, esta afirmación es:","options":["Correcta","Incorrecta porque los tres utilizan calmodulina","Incorrecta porque los tres utilizan troponina","Incorrecta porque el músculo liso no utiliza Ca²⁺"],"answer":"Correcta","ok":"Correcto. Esa diferencia regulatoria es fundamental entre músculo estriado y músculo liso.","bad":"Compara la proteína reguladora que une Ca²⁺ en músculo estriado versus músculo liso."},
 ]
 
-# =========================
-# FUNCIONES
-# =========================
-def reset_session():
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.rerun()
+SUCCESS_MESSAGES = [
+    "Muy bien. Identificaste correctamente el mecanismo.",
+    "Correcto. La relación fisiológica está bien establecida.",
+    "Excelente. Puedes avanzar al siguiente desafío.",
+    "Bien resuelto. Estás integrando correctamente los conceptos.",
+    "Correcto. Continúa con el siguiente nivel de razonamiento."
+]
 
-def shuffled_options(question):
-    opts = question["options"][:]
-    random.shuffle(opts)
-    return opts
+LEVEL_NAMES = {
+    1: "Fundamentos",
+    2: "Excitación–contracción",
+    3: "Comparación muscular",
+    4: "Integración fisiológica"
+}
 
-def choose_question(level, used_ids):
-    candidates = [
-        i for i, q in enumerate(QUESTIONS)
-        if q["level"] == level and i not in used_ids
-    ]
-    if not candidates:
-        candidates = [i for i, q in enumerate(QUESTIONS) if i not in used_ids]
-    if not candidates:
-        return None
-    return random.choice(candidates)
-
-def init_app():
-    defaults = {
+def defaults():
+    return {
         "started": False,
-        "current_level": 1,
-        "question_number": 0,
+        "question_no": 0,
         "score": 0,
-        "attempts": 0,
-        "used_ids": set(),
+        "attempt": 0,
         "current_id": None,
         "current_options": [],
         "answered": False,
-        "feedback": "",
-        "last_correct": False,
+        "feedback_kind": None,
+        "feedback_text": "",
         "correct_streak": 0,
-        "incorrect_streak": 0,
+        "error_streak": 0,
+        "adaptive_level": 1,
+        "seen_global": set(),
+        "seen_session": set(),
+        "confirm_reset": False,
         "history": [],
+        "session_seed": random.randint(1, 10_000_000),
     }
-    for k, v in defaults.items():
-        if k not in st.session_state:
-            st.session_state[k] = v
 
-def load_next_question():
-    if st.session_state.question_number >= 10:
-        return
-    qid = choose_question(st.session_state.current_level, st.session_state.used_ids)
-    if qid is None:
-        return
+for key, value in defaults().items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
+def available_ids(level):
+    pool = [
+        i for i, q in enumerate(QUESTIONS)
+        if q["level"] == level
+        and i not in st.session_state.seen_session
+        and i not in st.session_state.seen_global
+    ]
+
+    # Si ya se usaron muchas preguntas en sesiones anteriores,
+    # prioriza no repetir dentro de la sesión actual.
+    if not pool:
+        pool = [
+            i for i, q in enumerate(QUESTIONS)
+            if q["level"] == level
+            and i not in st.session_state.seen_session
+        ]
+
+    # Solo al agotar un nivel se habilita nuevamente todo el nivel.
+    if not pool:
+        pool = [i for i, q in enumerate(QUESTIONS) if q["level"] == level]
+
+    return pool
+
+def select_question():
+    level = max(1, min(4, st.session_state.adaptive_level))
+    pool = available_ids(level)
+
+    if not pool:
+        # Fallback excepcional
+        pool = [
+            i for i in range(len(QUESTIONS))
+            if i not in st.session_state.seen_session
+        ]
+
+    qid = random.choice(pool)
     st.session_state.current_id = qid
-    st.session_state.used_ids.add(qid)
-    st.session_state.current_options = shuffled_options(QUESTIONS[qid])
-    st.session_state.attempts = 0
+    st.session_state.seen_session.add(qid)
+    st.session_state.seen_global.add(qid)
+
+    opts = QUESTIONS[qid]["options"][:]
+    random.shuffle(opts)
+    st.session_state.current_options = opts
+    st.session_state.attempt = 0
     st.session_state.answered = False
-    st.session_state.feedback = ""
-    st.session_state.last_correct = False
+    st.session_state.feedback_kind = None
+    st.session_state.feedback_text = ""
 
-def adapt_level(correct):
-    level = st.session_state.current_level
+def start_session(keep_history=True):
+    seen_global = st.session_state.seen_global if keep_history else set()
 
+    # Si ya se vieron prácticamente todas, se reinicia el historial de repetición.
+    if len(seen_global) >= len(QUESTIONS):
+        seen_global = set()
+
+    for key, value in defaults().items():
+        st.session_state[key] = value
+
+    st.session_state.started = True
+    st.session_state.seen_global = seen_global
+    st.session_state.adaptive_level = 1
+    select_question()
+
+def update_difficulty(correct):
     if correct:
         st.session_state.correct_streak += 1
-        st.session_state.incorrect_streak = 0
-        if st.session_state.correct_streak >= 2 and level < 4:
-            st.session_state.current_level += 1
+        st.session_state.error_streak = 0
+        if st.session_state.correct_streak >= 2 and st.session_state.adaptive_level < 4:
+            st.session_state.adaptive_level += 1
             st.session_state.correct_streak = 0
     else:
-        st.session_state.incorrect_streak += 1
+        st.session_state.error_streak += 1
         st.session_state.correct_streak = 0
-        if st.session_state.incorrect_streak >= 2 and level > 1:
-            st.session_state.current_level -= 1
-            st.session_state.incorrect_streak = 0
+        if st.session_state.error_streak >= 2 and st.session_state.adaptive_level > 1:
+            st.session_state.adaptive_level -= 1
+            st.session_state.error_streak = 0
 
-# =========================
-# APP
-# =========================
-init_app()
+def next_question():
+    st.session_state.question_no += 1
+    if st.session_state.question_no < 10:
+        select_question()
 
-st.title("FisioMúsculo IA")
-st.markdown(
-    '<div class="subtle">Aplicación adaptativa de fisiología de la contracción muscular</div>',
-    unsafe_allow_html=True
-)
+def finish_feedback(q, correct, second_attempt=False):
+    if correct:
+        prefix = random.choice(SUCCESS_MESSAGES)
+        st.session_state.feedback_kind = "success"
+        st.session_state.feedback_text = f"{prefix}<br><br>{q['ok']}"
+    else:
+        st.session_state.feedback_kind = "error"
+        st.session_state.feedback_text = (
+            "Mira, aquí te lo explico mejor.<br><br>"
+            f"La respuesta correcta es <b>{q['answer']}</b>.<br><br>{q['bad']}"
+        )
 
-st.markdown("")
+# ============================================================
+# CABECERA
+# ============================================================
+title_col, reset_col = st.columns([5.4, 1.3], vertical_alignment="center")
 
+with title_col:
+    st.markdown('<div class="hero-title">FisioMúsculo IA</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="hero-subtitle">Fisiología de la contracción muscular · músculo esquelético, cardíaco y liso</div>',
+        unsafe_allow_html=True
+    )
+
+with reset_col:
+    if st.session_state.started:
+        if not st.session_state.confirm_reset:
+            if st.button("Reiniciar", use_container_width=True):
+                st.session_state.confirm_reset = True
+                st.rerun()
+        else:
+            st.markdown('<div class="small-note">¿Reiniciar?</div>', unsafe_allow_html=True)
+            c_yes, c_no = st.columns(2)
+            with c_yes:
+                if st.button("Sí", use_container_width=True):
+                    start_session(keep_history=True)
+                    st.rerun()
+            with c_no:
+                if st.button("No", use_container_width=True):
+                    st.session_state.confirm_reset = False
+                    st.rerun()
+
+# ============================================================
+# PORTADA
+# ============================================================
 if not st.session_state.started:
     st.markdown("""
     <div class="question-card">
-    <b>¿Cómo funciona?</b><br><br>
-    • 10 preguntas por sesión.<br>
-    • 2 intentos por pregunta.<br>
-    • La dificultad aumenta o disminuye según tu desempeño.<br>
-    • Recibirás retroalimentación inmediata.<br>
-    • Las preguntas se seleccionan de un banco de 80 ítems.
+        <div class="question-text">Entrenamiento adaptativo de 10 preguntas</div>
+        <div class="small-note" style="margin-top:.55rem;">
+        La dificultad se ajusta según tu desempeño. Tendrás dos intentos por pregunta
+        y recibirás una explicación inmediata cuando sea necesario.
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("Comenzar sesión", type="primary"):
-        st.session_state.started = True
-        load_next_question()
+    st.markdown(
+        """
+        <div class="feedback-box">
+        <b>¿Qué practicarás?</b><br>
+        Unión neuromuscular, sarcómero, actina–miosina, ATP, Ca²⁺,
+        acoplamiento excitación–contracción y diferencias entre músculo
+        esquelético, cardíaco y liso.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("")
+    if st.button("Comenzar sesión", type="primary", use_container_width=True):
+        start_session(keep_history=True)
         st.rerun()
 
-else:
-    if st.session_state.question_number >= 10:
-        st.success("Sesión finalizada")
-        st.markdown(
-            f"""
-            <div class="score-box">
-            <b>Puntaje final:</b> {st.session_state.score}/10<br>
-            <b>Nivel alcanzado:</b> {st.session_state.current_level}
+# ============================================================
+# SESIÓN
+# ============================================================
+elif st.session_state.question_no < 10:
+    q = QUESTIONS[st.session_state.current_id]
+
+    # Progreso compacto
+    progress_value = st.session_state.question_no / 10
+    st.progress(progress_value)
+
+    st.markdown(
+        f"""
+        <div class="info-row">
+            <div class="info-chip">
+                <div class="info-label">Pregunta</div>
+                <div class="info-value">{st.session_state.question_no + 1}/10</div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+            <div class="info-chip">
+                <div class="info-label">Dificultad</div>
+                <div class="info-value">Nivel {st.session_state.adaptive_level}</div>
+            </div>
+            <div class="info-chip">
+                <div class="info-label">Puntaje</div>
+                <div class="info-value">{st.session_state.score}</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        if st.session_state.score >= 8:
-            st.info("Muy buen dominio de los mecanismos de contracción muscular.")
-        elif st.session_state.score >= 6:
-            st.info("Buen desempeño. Conviene reforzar los mecanismos que generaron errores.")
-        else:
-            st.info("Se recomienda reforzar acoplamiento excitación-contracción, regulación por Ca²⁺ y diferencias entre los tres tipos musculares.")
+    left, right = st.columns([3.35, 1.15], gap="medium")
 
-        if st.button("Iniciar nueva sesión", type="primary"):
-            reset_session()
-
-    else:
-        if st.session_state.current_id is None:
-            load_next_question()
-
-        q = QUESTIONS[st.session_state.current_id]
-
-        st.progress(st.session_state.question_number / 10)
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Pregunta", f"{st.session_state.question_number + 1}/10")
-        c2.metric("Nivel", st.session_state.current_level)
-        c3.metric("Puntaje", st.session_state.score)
-
+    with left:
         st.markdown(
             f"""
             <div class="question-card">
-            <div class="level-badge">Nivel {q['level']}</div>
-            <div style="font-size:1.1rem; font-weight:700; color:#17324d;">
-            {q['q']}
-            </div>
+                <div class="question-number">Pregunta {st.session_state.question_no + 1}</div>
+                <div class="question-text">{q['q']}</div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
+        radio_key = f"q_{st.session_state.session_seed}_{st.session_state.question_no}_{st.session_state.current_id}"
         choice = st.radio(
             "Selecciona una alternativa:",
             st.session_state.current_options,
-            key=f"radio_{st.session_state.question_number}_{st.session_state.current_id}",
-            disabled=st.session_state.answered
+            key=radio_key,
+            disabled=st.session_state.answered,
+            index=None
         )
 
+    with right:
+        st.markdown('<div class="action-card">', unsafe_allow_html=True)
+
         if not st.session_state.answered:
-            if st.button("Responder", type="primary"):
-                st.session_state.attempts += 1
+            label = "Responder" if st.session_state.attempt == 0 else "Segundo intento"
+            if st.button(label, type="primary", use_container_width=True):
+                if choice is None:
+                    st.session_state.feedback_kind = "warning"
+                    st.session_state.feedback_text = "Selecciona una alternativa antes de responder."
+                    st.rerun()
+
+                st.session_state.attempt += 1
 
                 if choice == q["answer"]:
                     st.session_state.score += 1
-                    st.session_state.last_correct = True
                     st.session_state.answered = True
-                    st.session_state.feedback = q["ok"]
                     st.session_state.history.append({
-                        "question": q["q"],
+                        "qid": st.session_state.current_id,
                         "correct": True,
-                        "attempts": st.session_state.attempts,
+                        "attempts": st.session_state.attempt,
                         "level": q["level"]
                     })
-                    adapt_level(True)
-                else:
-                    if st.session_state.attempts < 2:
-                        st.session_state.feedback = (
-                            "Respuesta incorrecta. " + q["bad"] +
-                            " Te queda 1 intento."
-                        )
-                    else:
-                        st.session_state.last_correct = False
-                        st.session_state.answered = True
-                        st.session_state.feedback = (
-                            "La respuesta correcta es: "
-                            f"**{q['answer']}**. {q['bad']}"
-                        )
-                        st.session_state.history.append({
-                            "question": q["q"],
-                            "correct": False,
-                            "attempts": st.session_state.attempts,
-                            "level": q["level"]
-                        })
-                        adapt_level(False)
+                    update_difficulty(True)
+                    finish_feedback(q, True)
+                    st.rerun()
+
+                if st.session_state.attempt == 1:
+                    st.session_state.feedback_kind = "warning"
+                    st.session_state.feedback_text = (
+                        "Tranquilo(a), no pasa nada. Te explico.<br><br>"
+                        f"{q['bad']}<br><br>"
+                        "<b>Inténtalo una vez más.</b>"
+                    )
+                    st.rerun()
+
+                st.session_state.answered = True
+                st.session_state.history.append({
+                    "qid": st.session_state.current_id,
+                    "correct": False,
+                    "attempts": 2,
+                    "level": q["level"]
+                })
+                update_difficulty(False)
+                finish_feedback(q, False, second_attempt=True)
                 st.rerun()
 
-        if st.session_state.feedback:
-            if st.session_state.answered and st.session_state.last_correct:
-                st.success(st.session_state.feedback)
-            elif st.session_state.answered:
-                st.error(st.session_state.feedback)
-            else:
-                st.warning(st.session_state.feedback)
-
-        if st.session_state.answered:
-            if st.button("Siguiente pregunta", type="primary"):
-                st.session_state.question_number += 1
-                st.session_state.current_id = None
-                if st.session_state.question_number < 10:
-                    load_next_question()
+        else:
+            if st.button("Avanzar", type="primary", use_container_width=True):
+                next_question()
                 st.rerun()
 
-        st.markdown("---")
-        if st.button("Reiniciar sesión"):
-            reset_session()
+        st.markdown(
+            f'<div class="small-note" style="margin-top:.55rem;">Intento: {min(st.session_state.attempt + (0 if st.session_state.answered else 1), 2)} de 2</div>',
+            unsafe_allow_html=True
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("")
-st.caption("Desarrollado por Cristian Barahona")
+    # Feedback solo después de responder; no revela tema antes.
+    if st.session_state.feedback_text:
+        if st.session_state.feedback_kind == "success":
+            st.success("Correcto")
+        elif st.session_state.feedback_kind == "error":
+            st.error("Revisa este mecanismo")
+        elif st.session_state.feedback_kind == "warning":
+            st.warning("Revisa y vuelve a intentarlo")
+
+        st.markdown(
+            f"""
+            <div class="feedback-box">
+                <div class="feedback-title">Retroalimentación</div>
+                {st.session_state.feedback_text}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# ============================================================
+# RESULTADO FINAL
+# ============================================================
+else:
+    st.progress(1.0)
+
+    score = st.session_state.score
+    if score >= 9:
+        msg = "Dominio muy sólido de los mecanismos trabajados."
+    elif score >= 7:
+        msg = "Buen dominio. Revisa los mecanismos en los que necesitaste apoyo."
+    elif score >= 5:
+        msg = "Avance adecuado, pero conviene reforzar los pasos del acoplamiento excitación–contracción."
+    else:
+        msg = "Conviene realizar una nueva sesión de práctica antes de avanzar."
+
+    st.markdown(
+        f"""
+        <div class="question-card">
+            <div class="question-text">Sesión completada</div>
+            <div style="font-size:2rem;font-weight:850;color:#183b56;margin:.45rem 0;">
+                {score} / 10
+            </div>
+            <div class="small-note">{msg}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if st.button("Nueva sesión", type="primary", use_container_width=True):
+        start_session(keep_history=True)
+        st.rerun()
+
+st.markdown(
+    '<div class="author">Desarrollado por Cristian Barahona Videla · Uso educativo · © 2026</div>',
+    unsafe_allow_html=True
+)
